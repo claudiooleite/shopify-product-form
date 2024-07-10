@@ -1,31 +1,56 @@
-import { makeAutoObservable } from "mobx";
 
-function createProductStore() {
-    const store = {
-      title: "",
-      price: "",
-      stockQuantity: "",
-      description: "",
-      setTitle: function (value) {
-        this.title = value;
-      },
-      setPrice: function (value) {
-        this.price = value;
-      },
-      setStockQuantity: function (value) {
-        this.stockQuantity = value;
-      },
-      setDescription: function (value) {
-        this.description = value;
-      },
-      resetForm: function () {
-        this.title = "";
-        this.price = "";
-        this.stockQuantity = "";
-        this.description = "";
-      },
-    };
-    return makeAutoObservable(store);
+import { makeAutoObservable } from 'mobx';
+
+class ProductStore {
+  title = '';
+  price = '';
+  stockQuantity = '';
+  description = '';
+  message = '';
+
+  constructor() {
+    makeAutoObservable(this);
   }
-  
-  export const productStore = createProductStore();
+
+  setTitle(title) {
+    this.title = title;
+  }
+
+  setPrice(price) {
+    this.price = price;
+  }
+
+  setStockQuantity(stockQuantity) {
+    this.stockQuantity = stockQuantity;
+  }
+
+  setDescription(description) {
+    this.description = description;
+  }
+
+  setMessage(message) {
+    this.message = message;
+  }
+
+  validateForm() {
+    return this.title && this.price && this.stockQuantity && this.description;
+  }
+
+  async submitForm() {
+    if (!this.validateForm()) {
+      this.setMessage('All fields are required.');
+      return;
+    }
+
+    // Simulate an API call
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      this.setMessage('Product created successfully!');
+    } catch (error) {
+      this.setMessage('Error creating product.');
+    }
+  }
+}
+
+const productStore = new ProductStore();
+export default productStore;
